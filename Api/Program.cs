@@ -1,4 +1,3 @@
-// Api/Program.cs
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
