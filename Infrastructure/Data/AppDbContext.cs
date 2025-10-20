@@ -17,3 +17,4 @@ namespace Infrastructure.Data
         }
     }
 }
+//عند العمل مع PMC، يفضل استخدام dotnet CLI في مشاريع متعددة المشاريع لتجنب مشاكل Default Project.
