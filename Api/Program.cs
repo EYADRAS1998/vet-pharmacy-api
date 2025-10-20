@@ -1,3 +1,4 @@
+//
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,4 +9,5 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-app.Run();
+app.Run(); 
+
