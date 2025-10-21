@@ -10,14 +10,14 @@ namespace Domain.Interfaces
     public interface IUserRepository
     {
         // CRUD أساسية
-        User GetById(int id);
-        IEnumerable<User> GetAll();
-        void Add(User user);
-        void Update(User user);
-        void Delete(int id);
+        Task<User> GetById(int id);
+        Task<IEnumerable<User>> GetAll();
+        Task<bool> Add(User user);
+        Task<bool> Update(User user);
+        Task<bool> Delete(int id);
 
         // دوال إضافية مناسبة
-        User GetByUsername(string username);
-        bool Exists(string email);
+       Task<User>GetByUsername(string username);
+       Task<bool> Exists(string email);
     }
 }
