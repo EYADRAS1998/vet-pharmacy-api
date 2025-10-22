@@ -18,6 +18,7 @@ namespace Domain.Interfaces
 
         // دوال إضافية مناسبة
        Task<User>GetByUsername(string username);
+       Task<User>GetByEmailAsync(string email);
        Task<bool> Exists(string email);
     }
 }
