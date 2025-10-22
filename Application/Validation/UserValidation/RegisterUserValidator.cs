@@ -26,6 +26,10 @@ namespace Application.Validation.UserValidation
                 .Matches(@"[A-Z]").WithMessage("كلمة المرور يجب أن تحتوي على حرف كبير واحد على الأقل.")
                 .Matches(@"[a-z]").WithMessage("كلمة المرور يجب أن تحتوي على حرف صغير واحد على الأقل.")
                 .Matches(@"\d").WithMessage("كلمة المرور يجب أن تحتوي على رقم واحد على الأقل.");
+
+            // التحقق من تطابق كلمة المرور مع التأكيد
+            RuleFor(x => x.ConfirmPassword)
+                .Equal(x => x.Password).WithMessage("كلمة المرور وتأكيدها غير متطابقين.");
         }
     }
 }

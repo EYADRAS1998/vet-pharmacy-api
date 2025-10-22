@@ -1,0 +1,47 @@
+﻿@page "/register"
+@inject UserService UserService
+@inject NavigationManager Navigation
+@using Application.DTOs
+@using Application.DTOs.UserDTOs
+@using MudBlazor
+
+<MudPaper Class="pa-6 mx-auto mt-12" Style="max-width:400px">
+    <MudText Typo="Typo.h5" Class="mb-4">إنشاء حساب جديد</MudText>
+
+    <MudForm @ref="form" OnValidSubmit="HandleRegister">
+        <MudTextField @bind-Value="registerDto.Username" Label="اسم المستخدم" Required="true" />
+        <MudTextField @bind-Value="registerDto.Email" Label="البريد الإلكتروني" Required="true" />
+        <MudTextField @bind-Value="registerDto.Password" Label="كلمة المرور" InputType="InputType.Password" Required="true" />
+        <MudTextField @bind-Value="registerDto.ConfirmPassword" Label="تأكيد كلمة المرور" InputType="InputType.Password" Required="true" />
+
+        <MudButton Type="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" FullWidth="true">
+            إنشاء الحساب
+        </MudButton>
+    </MudForm>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <MudText Color="@messageColor" Class="mt-2">@message</MudText>
+    }
+</MudPaper>
+
+@code {
+    private MudForm form;
+    private RegisterUserDto registerDto = new RegisterUserDto();
+    private string message;
+    private Color messageColor = Color.Success;
+
+    private async Task HandleRegister()
+    {
+        var result = await UserService.RegisterAsync(registerDto);
+
+        message = result.Message;
+        messageColor = result.Success ? Color.Success : Color.Error;
+
+        if (result.Success)
+        {
+            await Task.Delay(2000);
+            Navigation.NavigateTo("/login");
+        }
+    }
+}

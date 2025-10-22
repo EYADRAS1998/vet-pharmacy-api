@@ -1,0 +1,66 @@
+﻿@inherits LayoutComponentBase
+@using BlazorApp.Themes
+@using MudBlazor
+@inject NavigationManager Navigation
+@inject AuthenticationService AuthService
+
+<MudThemeProvider Theme="new CustomTheme()" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+<MudPopoverProvider />
+
+<MudLayout>
+
+    <MudAppBar Elevation="4" Color="Color.Primary" Dense="true">
+        <MudText Typo="Typo.h5" Class="ml-2">Vit Pharmacy</MudText>
+        <MudSpacer />
+        <MudDivider Vertical="true" Class="mx-2" />
+
+        @if (isLoggedIn)
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" OnClick="Logout">تسجيل الخروج</MudButton>
+        }
+        else
+        {
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Href="/login">تسجيل الدخول</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Secondary" Href="/register">إنشاء حساب</MudButton>
+        }
+    </MudAppBar>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
+            <MudPaper Elevation="3" Class="pa-6">
+                @Body
+            </MudPaper>
+        </MudContainer>
+    </MudMainContent>
+
+</MudLayout>
+
+@code {
+    private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoggedIn = await AuthService.IsUserLoggedInAsync();
+        AuthService.OnAuthStateChanged += OnAuthStateChanged;
+    }
+
+    private async Task OnAuthStateChanged()
+    {
+        isLoggedIn = await AuthService.IsUserLoggedInAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Logout()
+    {
+        await AuthService.RemoveToken();
+        isLoggedIn = false;
+        Navigation.NavigateTo("/login", true);
+    }
+
+    public void Dispose()
+    {
+        AuthService.OnAuthStateChanged -= OnAuthStateChanged;
+    }
+}

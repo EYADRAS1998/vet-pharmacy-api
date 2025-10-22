@@ -1,0 +1,44 @@
+﻿@page "/login"
+@inject UserService UserService
+@inject NavigationManager Navigation
+@using Application.DTOs.UserDTOs
+@using MudBlazor
+
+<MudPaper Class="pa-6 mx-auto mt-12" Style="max-width:400px">
+    <MudText Typo="Typo.h5" Class="mb-4">تسجيل الدخول</MudText>
+
+    <MudForm @ref="form" OnValidSubmit="HandleLogin">
+        <MudTextField @bind-Value="loginDto.EmailOrUsername" Label="اسم المستخدم أو البريد الإلكتروني" Required="true" />
+        <MudTextField @bind-Value="loginDto.Password" Label="كلمة المرور" InputType="InputType.Password" Required="true" />
+
+        <MudButton Type="Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" FullWidth="true">
+            تسجيل الدخول
+        </MudButton>
+    </MudForm>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <MudText Color="@messageColor" Class="mt-2">@message</MudText>
+    }
+</MudPaper>
+
+@code {
+    private MudForm form;
+    private LoginUserDto loginDto = new LoginUserDto();
+    private string message;
+    private Color messageColor = Color.Success;
+
+    private async Task HandleLogin()
+    {
+        var result = await UserService.LoginAsync(loginDto);
+
+        message = result.Message;
+        messageColor = result.Success ? Color.Success : Color.Error;
+
+        if (result.Success)
+        {
+            await Task.Delay(1000);
+            Navigation.NavigateTo("/");
+        }
+    }
+}
